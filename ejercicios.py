@@ -1,3 +1,4 @@
+#ejercicios basicos de python, proximamente cambiado a Jupitter notebook
 import math 
 #ejercicio 1
 """a=float(input("ingrese a: "))
