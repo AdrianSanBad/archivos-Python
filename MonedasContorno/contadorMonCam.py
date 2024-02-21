@@ -1,3 +1,4 @@
+#con este codigo se podra reconocer monedas en camara y contar su total
 import cv2
 import numpy
 def ordenarPuntos(puntos):
