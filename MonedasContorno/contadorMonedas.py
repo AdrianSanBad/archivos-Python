@@ -2,7 +2,7 @@ import cv2  #importar cv2
 import numpy  #importar libreria para trabajar con arrays
 vGauss=5 #definir variable para desenfoque gaussiano
 vKernel=5 #definir variable para kernel
-original=cv2.imread('MonedasContorno/monedaMX.png.jpg') #leer imagen
+original=cv2.imread('MonedasContorno/monedaMX.png') #leer imagen
 gris=cv2.cvtColor(original,cv2.COLOR_BGR2GRAY) #convertir imagen a escala de grises
 desenfoque=cv2.GaussianBlur(gris,(vGauss,vKernel),0) #aplicar desenfoque gaussiano
 canny=cv2.Canny(desenfoque,60,100) #deteccion de bordes
