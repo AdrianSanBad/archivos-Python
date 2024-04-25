@@ -10,4 +10,7 @@ def write_liked_songs_to_file(liked_songs,file_name):
   for titulo,artista in liked_songs.items():
     documento.write(f"{titulo} by {artista} \n")
 
-write_liked_songs_to_file(liked_songs, "canciones.txt")
+#write_liked_songs_to_file(liked_songs, "canciones.txt")
+
+documento=open("canciones.txt","r")
+print(documento.read())
