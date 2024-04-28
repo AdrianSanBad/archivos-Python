@@ -1,3 +1,4 @@
+#aqui se muestra como crear un archivo y escribir en el para despues leerlo y modificarlo
 """
 sent_message = 'este es un mensaje que jamas deberia salir de aqui.'
 
