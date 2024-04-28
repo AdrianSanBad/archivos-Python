@@ -20,3 +20,4 @@ print(A^B)
 print(A-B)
 print(B-A)
 #Estudiar
+#repasamos
