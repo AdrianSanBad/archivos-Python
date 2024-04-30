@@ -27,8 +27,3 @@ with open("bestseller_info.csv", "w", newline="", encoding="utf-8") as file:
     csv_writer = csv.writer(file)
     #escribir la fila con los datos del libro con mas ventas
     csv_writer.writerow(bestseller_info)
-
-       
-
-
-    
