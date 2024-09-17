@@ -1,0 +1,374 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    COMENTARIO
+
+Grammar
+
+Rule 0     S' -> programa
+Rule 1     programa -> asignacion
+Rule 2     programa -> expr
+Rule 3     asignacion -> VARIABLE ASIGNACION expr
+Rule 4     expr -> expr MAS term
+Rule 5     expr -> expr MENOS term
+Rule 6     expr -> term
+Rule 7     term -> term MULTIPLICACION factor
+Rule 8     term -> term DIVISION factor
+Rule 9     term -> factor
+Rule 10    factor -> PARENTESIS_IZQ expr PARENTESIS_DER
+Rule 11    factor -> NUMERO_ENTERO
+Rule 12    factor -> NUMERO_FLOTANTE
+Rule 13    factor -> VARIABLE
+
+Terminals, with rules where they appear
+
+ASIGNACION           : 3
+COMENTARIO           : 
+DIVISION             : 8
+MAS                  : 4
+MENOS                : 5
+MULTIPLICACION       : 7
+NUMERO_ENTERO        : 11
+NUMERO_FLOTANTE      : 12
+PARENTESIS_DER       : 10
+PARENTESIS_IZQ       : 10
+VARIABLE             : 3 13
+error                : 
+
+Nonterminals, with rules where they appear
+
+asignacion           : 1
+expr                 : 2 3 4 5 10
+factor               : 7 8 9
+programa             : 0
+term                 : 4 5 6 7 8
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . programa
+    (1) programa -> . asignacion
+    (2) programa -> . expr
+    (3) asignacion -> . VARIABLE ASIGNACION expr
+    (4) expr -> . expr MAS term
+    (5) expr -> . expr MENOS term
+    (6) expr -> . term
+    (7) term -> . term MULTIPLICACION factor
+    (8) term -> . term DIVISION factor
+    (9) term -> . factor
+    (10) factor -> . PARENTESIS_IZQ expr PARENTESIS_DER
+    (11) factor -> . NUMERO_ENTERO
+    (12) factor -> . NUMERO_FLOTANTE
+    (13) factor -> . VARIABLE
+
+    VARIABLE        shift and go to state 4
+    PARENTESIS_IZQ  shift and go to state 7
+    NUMERO_ENTERO   shift and go to state 8
+    NUMERO_FLOTANTE shift and go to state 9
+
+    programa                       shift and go to state 1
+    asignacion                     shift and go to state 2
+    expr                           shift and go to state 3
+    term                           shift and go to state 5
+    factor                         shift and go to state 6
+
+state 1
+
+    (0) S' -> programa .
+
+
+
+state 2
+
+    (1) programa -> asignacion .
+
+    $end            reduce using rule 1 (programa -> asignacion .)
+
+
+state 3
+
+    (2) programa -> expr .
+    (4) expr -> expr . MAS term
+    (5) expr -> expr . MENOS term
+
+    $end            reduce using rule 2 (programa -> expr .)
+    MAS             shift and go to state 10
+    MENOS           shift and go to state 11
+
+
+state 4
+
+    (3) asignacion -> VARIABLE . ASIGNACION expr
+    (13) factor -> VARIABLE .
+
+    ASIGNACION      shift and go to state 12
+    MULTIPLICACION  reduce using rule 13 (factor -> VARIABLE .)
+    DIVISION        reduce using rule 13 (factor -> VARIABLE .)
+    MAS             reduce using rule 13 (factor -> VARIABLE .)
+    MENOS           reduce using rule 13 (factor -> VARIABLE .)
+    $end            reduce using rule 13 (factor -> VARIABLE .)
+
+
+state 5
+
+    (6) expr -> term .
+    (7) term -> term . MULTIPLICACION factor
+    (8) term -> term . DIVISION factor
+
+    MAS             reduce using rule 6 (expr -> term .)
+    MENOS           reduce using rule 6 (expr -> term .)
+    $end            reduce using rule 6 (expr -> term .)
+    PARENTESIS_DER  reduce using rule 6 (expr -> term .)
+    MULTIPLICACION  shift and go to state 13
+    DIVISION        shift and go to state 14
+
+
+state 6
+
+    (9) term -> factor .
+
+    MULTIPLICACION  reduce using rule 9 (term -> factor .)
+    DIVISION        reduce using rule 9 (term -> factor .)
+    MAS             reduce using rule 9 (term -> factor .)
+    MENOS           reduce using rule 9 (term -> factor .)
+    $end            reduce using rule 9 (term -> factor .)
+    PARENTESIS_DER  reduce using rule 9 (term -> factor .)
+
+
+state 7
+
+    (10) factor -> PARENTESIS_IZQ . expr PARENTESIS_DER
+    (4) expr -> . expr MAS term
+    (5) expr -> . expr MENOS term
+    (6) expr -> . term
+    (7) term -> . term MULTIPLICACION factor
+    (8) term -> . term DIVISION factor
+    (9) term -> . factor
+    (10) factor -> . PARENTESIS_IZQ expr PARENTESIS_DER
+    (11) factor -> . NUMERO_ENTERO
+    (12) factor -> . NUMERO_FLOTANTE
+    (13) factor -> . VARIABLE
+
+    PARENTESIS_IZQ  shift and go to state 7
+    NUMERO_ENTERO   shift and go to state 8
+    NUMERO_FLOTANTE shift and go to state 9
+    VARIABLE        shift and go to state 16
+
+    expr                           shift and go to state 15
+    term                           shift and go to state 5
+    factor                         shift and go to state 6
+
+state 8
+
+    (11) factor -> NUMERO_ENTERO .
+
+    MULTIPLICACION  reduce using rule 11 (factor -> NUMERO_ENTERO .)
+    DIVISION        reduce using rule 11 (factor -> NUMERO_ENTERO .)
+    MAS             reduce using rule 11 (factor -> NUMERO_ENTERO .)
+    MENOS           reduce using rule 11 (factor -> NUMERO_ENTERO .)
+    $end            reduce using rule 11 (factor -> NUMERO_ENTERO .)
+    PARENTESIS_DER  reduce using rule 11 (factor -> NUMERO_ENTERO .)
+
+
+state 9
+
+    (12) factor -> NUMERO_FLOTANTE .
+
+    MULTIPLICACION  reduce using rule 12 (factor -> NUMERO_FLOTANTE .)
+    DIVISION        reduce using rule 12 (factor -> NUMERO_FLOTANTE .)
+    MAS             reduce using rule 12 (factor -> NUMERO_FLOTANTE .)
+    MENOS           reduce using rule 12 (factor -> NUMERO_FLOTANTE .)
+    $end            reduce using rule 12 (factor -> NUMERO_FLOTANTE .)
+    PARENTESIS_DER  reduce using rule 12 (factor -> NUMERO_FLOTANTE .)
+
+
+state 10
+
+    (4) expr -> expr MAS . term
+    (7) term -> . term MULTIPLICACION factor
+    (8) term -> . term DIVISION factor
+    (9) term -> . factor
+    (10) factor -> . PARENTESIS_IZQ expr PARENTESIS_DER
+    (11) factor -> . NUMERO_ENTERO
+    (12) factor -> . NUMERO_FLOTANTE
+    (13) factor -> . VARIABLE
+
+    PARENTESIS_IZQ  shift and go to state 7
+    NUMERO_ENTERO   shift and go to state 8
+    NUMERO_FLOTANTE shift and go to state 9
+    VARIABLE        shift and go to state 16
+
+    term                           shift and go to state 17
+    factor                         shift and go to state 6
+
+state 11
+
+    (5) expr -> expr MENOS . term
+    (7) term -> . term MULTIPLICACION factor
+    (8) term -> . term DIVISION factor
+    (9) term -> . factor
+    (10) factor -> . PARENTESIS_IZQ expr PARENTESIS_DER
+    (11) factor -> . NUMERO_ENTERO
+    (12) factor -> . NUMERO_FLOTANTE
+    (13) factor -> . VARIABLE
+
+    PARENTESIS_IZQ  shift and go to state 7
+    NUMERO_ENTERO   shift and go to state 8
+    NUMERO_FLOTANTE shift and go to state 9
+    VARIABLE        shift and go to state 16
+
+    term                           shift and go to state 18
+    factor                         shift and go to state 6
+
+state 12
+
+    (3) asignacion -> VARIABLE ASIGNACION . expr
+    (4) expr -> . expr MAS term
+    (5) expr -> . expr MENOS term
+    (6) expr -> . term
+    (7) term -> . term MULTIPLICACION factor
+    (8) term -> . term DIVISION factor
+    (9) term -> . factor
+    (10) factor -> . PARENTESIS_IZQ expr PARENTESIS_DER
+    (11) factor -> . NUMERO_ENTERO
+    (12) factor -> . NUMERO_FLOTANTE
+    (13) factor -> . VARIABLE
+
+    PARENTESIS_IZQ  shift and go to state 7
+    NUMERO_ENTERO   shift and go to state 8
+    NUMERO_FLOTANTE shift and go to state 9
+    VARIABLE        shift and go to state 16
+
+    expr                           shift and go to state 19
+    term                           shift and go to state 5
+    factor                         shift and go to state 6
+
+state 13
+
+    (7) term -> term MULTIPLICACION . factor
+    (10) factor -> . PARENTESIS_IZQ expr PARENTESIS_DER
+    (11) factor -> . NUMERO_ENTERO
+    (12) factor -> . NUMERO_FLOTANTE
+    (13) factor -> . VARIABLE
+
+    PARENTESIS_IZQ  shift and go to state 7
+    NUMERO_ENTERO   shift and go to state 8
+    NUMERO_FLOTANTE shift and go to state 9
+    VARIABLE        shift and go to state 16
+
+    factor                         shift and go to state 20
+
+state 14
+
+    (8) term -> term DIVISION . factor
+    (10) factor -> . PARENTESIS_IZQ expr PARENTESIS_DER
+    (11) factor -> . NUMERO_ENTERO
+    (12) factor -> . NUMERO_FLOTANTE
+    (13) factor -> . VARIABLE
+
+    PARENTESIS_IZQ  shift and go to state 7
+    NUMERO_ENTERO   shift and go to state 8
+    NUMERO_FLOTANTE shift and go to state 9
+    VARIABLE        shift and go to state 16
+
+    factor                         shift and go to state 21
+
+state 15
+
+    (10) factor -> PARENTESIS_IZQ expr . PARENTESIS_DER
+    (4) expr -> expr . MAS term
+    (5) expr -> expr . MENOS term
+
+    PARENTESIS_DER  shift and go to state 22
+    MAS             shift and go to state 10
+    MENOS           shift and go to state 11
+
+
+state 16
+
+    (13) factor -> VARIABLE .
+
+    MULTIPLICACION  reduce using rule 13 (factor -> VARIABLE .)
+    DIVISION        reduce using rule 13 (factor -> VARIABLE .)
+    PARENTESIS_DER  reduce using rule 13 (factor -> VARIABLE .)
+    MAS             reduce using rule 13 (factor -> VARIABLE .)
+    MENOS           reduce using rule 13 (factor -> VARIABLE .)
+    $end            reduce using rule 13 (factor -> VARIABLE .)
+
+
+state 17
+
+    (4) expr -> expr MAS term .
+    (7) term -> term . MULTIPLICACION factor
+    (8) term -> term . DIVISION factor
+
+    MAS             reduce using rule 4 (expr -> expr MAS term .)
+    MENOS           reduce using rule 4 (expr -> expr MAS term .)
+    $end            reduce using rule 4 (expr -> expr MAS term .)
+    PARENTESIS_DER  reduce using rule 4 (expr -> expr MAS term .)
+    MULTIPLICACION  shift and go to state 13
+    DIVISION        shift and go to state 14
+
+
+state 18
+
+    (5) expr -> expr MENOS term .
+    (7) term -> term . MULTIPLICACION factor
+    (8) term -> term . DIVISION factor
+
+    MAS             reduce using rule 5 (expr -> expr MENOS term .)
+    MENOS           reduce using rule 5 (expr -> expr MENOS term .)
+    $end            reduce using rule 5 (expr -> expr MENOS term .)
+    PARENTESIS_DER  reduce using rule 5 (expr -> expr MENOS term .)
+    MULTIPLICACION  shift and go to state 13
+    DIVISION        shift and go to state 14
+
+
+state 19
+
+    (3) asignacion -> VARIABLE ASIGNACION expr .
+    (4) expr -> expr . MAS term
+    (5) expr -> expr . MENOS term
+
+    $end            reduce using rule 3 (asignacion -> VARIABLE ASIGNACION expr .)
+    MAS             shift and go to state 10
+    MENOS           shift and go to state 11
+
+
+state 20
+
+    (7) term -> term MULTIPLICACION factor .
+
+    MULTIPLICACION  reduce using rule 7 (term -> term MULTIPLICACION factor .)
+    DIVISION        reduce using rule 7 (term -> term MULTIPLICACION factor .)
+    MAS             reduce using rule 7 (term -> term MULTIPLICACION factor .)
+    MENOS           reduce using rule 7 (term -> term MULTIPLICACION factor .)
+    $end            reduce using rule 7 (term -> term MULTIPLICACION factor .)
+    PARENTESIS_DER  reduce using rule 7 (term -> term MULTIPLICACION factor .)
+
+
+state 21
+
+    (8) term -> term DIVISION factor .
+
+    MULTIPLICACION  reduce using rule 8 (term -> term DIVISION factor .)
+    DIVISION        reduce using rule 8 (term -> term DIVISION factor .)
+    MAS             reduce using rule 8 (term -> term DIVISION factor .)
+    MENOS           reduce using rule 8 (term -> term DIVISION factor .)
+    $end            reduce using rule 8 (term -> term DIVISION factor .)
+    PARENTESIS_DER  reduce using rule 8 (term -> term DIVISION factor .)
+
+
+state 22
+
+    (10) factor -> PARENTESIS_IZQ expr PARENTESIS_DER .
+
+    MULTIPLICACION  reduce using rule 10 (factor -> PARENTESIS_IZQ expr PARENTESIS_DER .)
+    DIVISION        reduce using rule 10 (factor -> PARENTESIS_IZQ expr PARENTESIS_DER .)
+    MAS             reduce using rule 10 (factor -> PARENTESIS_IZQ expr PARENTESIS_DER .)
+    MENOS           reduce using rule 10 (factor -> PARENTESIS_IZQ expr PARENTESIS_DER .)
+    $end            reduce using rule 10 (factor -> PARENTESIS_IZQ expr PARENTESIS_DER .)
+    PARENTESIS_DER  reduce using rule 10 (factor -> PARENTESIS_IZQ expr PARENTESIS_DER .)
+
