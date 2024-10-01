@@ -54,7 +54,6 @@ def analizar_lexico(codigo):
     if balance_parentesis != 0: #si el balance de paréntesis no es 0, hay paréntesis de apertura sin cerrar
         print("Error: Paréntesis de apertura sin paréntesis de cierre.")
         return None
-
     return tokens_encontrados #retornar la lista de tokens encontrados
 
 # Solicitar al usuario que ingrese el código
