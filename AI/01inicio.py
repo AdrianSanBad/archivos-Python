@@ -1,0 +1,1 @@
+print("Me interesa aprender a como usar, crear y modificar inteligencias artificiales como lo son chatgpt, claude, copilot")
