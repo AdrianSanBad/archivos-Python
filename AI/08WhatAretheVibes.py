@@ -2,27 +2,44 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+from textblob import TextBlob
 
-reviews = ['This movie was fantastic! A must-watch.',
-           'I didn\'t enjoy this movie at all.',
-           'Amazing storyline and great acting!',
-           'The plot was dull and predictable.',
-           'Loved the cinematography! Highly recommended.']
+# Sample movie reviews
+reviews = [
+    "This movie was fantastic! Amazing, iconic",
+    "I loved it!", "Amazing storyline and great acting!",
+    "The plot was cringe.",
+    "Loved the acting! Highly recommended."
+]
+# Labels for the reviews
+labels = ["positive", "positive", "positive", "negative", "positive"]
 
-labels = ['positive', 'negative', 'positive', 'negative', 'positive']
+# (Optional) Correct any spelling mistakes in the reviews using TextBlob
+corrected_reviews = [str(TextBlob(review).correct()) for review in reviews]
 
+# Convert the text data into numerical format using CountVectorizer
 vectorizer = CountVectorizer()
-x = vectorizer.fit_transform(reviews)
+X = vectorizer.fit_transform(corrected_reviews)
 
-x_train, x_test, y_train, y_test = train_test_split(x, labels, test_size=0.2, random_state=42)
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X,labels,test_size=0.2,random_state=42)
+
+# Create a Naive Bayes classifier
 model = MultinomialNB()
-model.fit(x_train, y_train)
 
-y_pred = model.predict(x_test)
+# Train the model
+model.fit(X_train, y_train)
+
+# Use the trained model to make predictions on the test data
+y_pred = model.predict(X_test)
+
+# Calculate the accuracy of the model
 accuracy = accuracy_score(y_test, y_pred)
 
-print('Accuracy:', accuracy)
-if accuracy > 0.8:
-  print('Good vibes. Book the ticket!')
+# Print the accuracy
+print("Accuracy:", accuracy)
+
+if accuracy > 0.5:
+  print("The vibes are great, book the tickets!")
 else:
-  print('Needs more work!')
+  print("The vibes are iffy")
