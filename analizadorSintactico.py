@@ -86,13 +86,13 @@ def p_asignacion(p):
     variables_definidas.add(p[1])  # Registrar la variable como definida
     p[0] = ('asignacion', p[1], p[3])
 
+def p_asignacion_error(p):
+    '''asignacion : VARIABLE ASIGNACION error'''
+    texto_sintactico.insert(tk.END, "Error de sintaxis: Asignación incompleta. Verifique que haya un valor o una expresión después del operador '='.\n")
+
 def p_ciclo(p):
     '''ciclo : PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque'''
     p[0] = ('ciclo', p[3], p[5])
-
-def p_bloque(p):
-    '''bloque : PARENTESIS_IZQ programa PARENTESIS_DER'''
-    p[0] = p[2]
 
 def p_condicion(p):
     '''condicion : VARIABLE MENOR_IGUAL expr 
@@ -104,6 +104,18 @@ def p_condicion(p):
     if p[1] not in variables_definidas:
         raise ValueError(f"Variable no definida: {p[1]}")
     p[0] = ('condicion', p[1], p[2], p[3])
+
+def p_condicion_error(p):
+    '''condicion : VARIABLE error'''
+    texto_sintactico.insert(tk.END, "Error de sintaxis: Condición incompleta. Verifique la comparación o los operadores usados en la condición.\n")
+
+def p_bloque(p):
+    '''bloque : PARENTESIS_IZQ programa PARENTESIS_DER'''
+    p[0] = p[2]
+
+def p_bloque_error(p):
+    '''bloque : PARENTESIS_IZQ error'''
+    texto_sintactico.insert(tk.END, "Error de sintaxis: Bloque mal formado. Verifique los paréntesis de apertura y cierre del ciclo.\n")
 
 def p_expr(p):
     '''expr : expr MAS term 
@@ -136,7 +148,7 @@ def p_error(p):
     if p:
         texto_sintactico.insert(tk.END, f"Error de sintaxis: Token inesperado '{p.value}' en la línea {p.lineno}\n")
     else:
-        texto_sintactico.insert(tk.END, "Error de sintaxis: Fin inesperado del archivo.\n")
+        texto_sintactico.insert(tk.END, "Error de sintaxis: Se alcanzó el final del código sin completar una estructura válida.\n")
 
 # Construcción del parser
 parser = yacc.yacc()
@@ -155,8 +167,11 @@ def analizar(codigo):
 
     try:
         resultado = parser.parse(codigo)
-        tokens_sintacticos = "\n".join(str(item) for item in resultado) if resultado else "No se generaron tokens sintácticos."
-        texto_sintactico.insert(tk.END, tokens_sintacticos + "\n")
+        if resultado:
+            tokens_sintacticos = "\n".join(str(item) for item in resultado)
+            texto_sintactico.insert(tk.END, tokens_sintacticos + "\n")
+        else:
+            texto_sintactico.insert(tk.END, "No se generaron tokens sintácticos debido a errores en el código.\n")
         semantico = f"Variables definidas: {', '.join(variables_definidas)}\n"
     except ValueError as e:
         semantico = f"Error semántico: {e}\n"
@@ -211,5 +226,8 @@ texto_sintactico.grid(row=4, column=1, padx=5, pady=5)
 tk.Label(ventana, text="Análisis Semántico:").grid(row=3, column=2, padx=5, pady=5)
 texto_semantico = tk.Text(ventana, height=10, width=30)
 texto_semantico.grid(row=4, column=2, padx=5, pady=5)
+ventana.configure(bg='powder blue')
+
+
 
 ventana.mainloop()

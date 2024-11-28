@@ -12,57 +12,60 @@ Rule 2     programa -> programa instruccion
 Rule 3     instruccion -> asignacion
 Rule 4     instruccion -> ciclo
 Rule 5     asignacion -> VARIABLE ASIGNACION expr
-Rule 6     ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque
-Rule 7     bloque -> PARENTESIS_IZQ programa PARENTESIS_DER
+Rule 6     asignacion -> VARIABLE ASIGNACION error
+Rule 7     ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque
 Rule 8     condicion -> VARIABLE MENOR_IGUAL expr
 Rule 9     condicion -> VARIABLE MAYOR_IGUAL expr
 Rule 10    condicion -> VARIABLE IGUAL expr
 Rule 11    condicion -> VARIABLE DIFERENTE expr
 Rule 12    condicion -> VARIABLE MENOR expr
 Rule 13    condicion -> VARIABLE MAYOR expr
-Rule 14    expr -> expr MAS term
-Rule 15    expr -> expr MENOS term
-Rule 16    expr -> term
-Rule 17    term -> term MULTIPLICACION factor
-Rule 18    term -> term DIVISION factor
-Rule 19    term -> factor
-Rule 20    factor -> NUMERO_ENTERO
-Rule 21    factor -> NUMERO_FLOTANTE
-Rule 22    factor -> VARIABLE
+Rule 14    condicion -> VARIABLE error
+Rule 15    bloque -> PARENTESIS_IZQ programa PARENTESIS_DER
+Rule 16    bloque -> PARENTESIS_IZQ error
+Rule 17    expr -> expr MAS term
+Rule 18    expr -> expr MENOS term
+Rule 19    expr -> term
+Rule 20    term -> term MULTIPLICACION factor
+Rule 21    term -> term DIVISION factor
+Rule 22    term -> factor
+Rule 23    factor -> NUMERO_ENTERO
+Rule 24    factor -> NUMERO_FLOTANTE
+Rule 25    factor -> VARIABLE
 
 Terminals, with rules where they appear
 
-ASIGNACION           : 5
+ASIGNACION           : 5 6
 COMENTARIO           : 
 DIFERENTE            : 11
-DIVISION             : 18
+DIVISION             : 21
 IGUAL                : 10
-MAS                  : 14
+MAS                  : 17
 MAYOR                : 13
 MAYOR_IGUAL          : 9
 MENOR                : 12
 MENOR_IGUAL          : 8
-MENOS                : 15
-MULTIPLICACION       : 17
-NUMERO_ENTERO        : 20
-NUMERO_FLOTANTE      : 21
-PALABRA_RESERVADA    : 6
-PARENTESIS_DER       : 6 7
-PARENTESIS_IZQ       : 6 7
-VARIABLE             : 5 8 9 10 11 12 13 22
-error                : 
+MENOS                : 18
+MULTIPLICACION       : 20
+NUMERO_ENTERO        : 23
+NUMERO_FLOTANTE      : 24
+PALABRA_RESERVADA    : 7
+PARENTESIS_DER       : 7 15
+PARENTESIS_IZQ       : 7 15 16
+VARIABLE             : 5 6 8 9 10 11 12 13 14 25
+error                : 6 14 16
 
 Nonterminals, with rules where they appear
 
 asignacion           : 3
-bloque               : 6
+bloque               : 7
 ciclo                : 4
-condicion            : 6
-expr                 : 5 8 9 10 11 12 13 14 15
-factor               : 17 18 19
+condicion            : 7
+expr                 : 5 8 9 10 11 12 13 17 18
+factor               : 20 21 22
 instruccion          : 1 2
-programa             : 2 7 0
-term                 : 14 15 16 17 18
+programa             : 2 15 0
+term                 : 17 18 19 20 21
 
 Parsing method: LALR
 
@@ -74,7 +77,8 @@ state 0
     (3) instruccion -> . asignacion
     (4) instruccion -> . ciclo
     (5) asignacion -> . VARIABLE ASIGNACION expr
-    (6) ciclo -> . PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque
+    (6) asignacion -> . VARIABLE ASIGNACION error
+    (7) ciclo -> . PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque
 
     VARIABLE        shift and go to state 5
     PALABRA_RESERVADA shift and go to state 6
@@ -91,7 +95,8 @@ state 1
     (3) instruccion -> . asignacion
     (4) instruccion -> . ciclo
     (5) asignacion -> . VARIABLE ASIGNACION expr
-    (6) ciclo -> . PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque
+    (6) asignacion -> . VARIABLE ASIGNACION error
+    (7) ciclo -> . PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque
 
     VARIABLE        shift and go to state 5
     PALABRA_RESERVADA shift and go to state 6
@@ -133,13 +138,14 @@ state 4
 state 5
 
     (5) asignacion -> VARIABLE . ASIGNACION expr
+    (6) asignacion -> VARIABLE . ASIGNACION error
 
     ASIGNACION      shift and go to state 8
 
 
 state 6
 
-    (6) ciclo -> PALABRA_RESERVADA . PARENTESIS_IZQ condicion PARENTESIS_DER bloque
+    (7) ciclo -> PALABRA_RESERVADA . PARENTESIS_IZQ condicion PARENTESIS_DER bloque
 
     PARENTESIS_IZQ  shift and go to state 9
 
@@ -157,132 +163,145 @@ state 7
 state 8
 
     (5) asignacion -> VARIABLE ASIGNACION . expr
-    (14) expr -> . expr MAS term
-    (15) expr -> . expr MENOS term
-    (16) expr -> . term
-    (17) term -> . term MULTIPLICACION factor
-    (18) term -> . term DIVISION factor
-    (19) term -> . factor
-    (20) factor -> . NUMERO_ENTERO
-    (21) factor -> . NUMERO_FLOTANTE
-    (22) factor -> . VARIABLE
+    (6) asignacion -> VARIABLE ASIGNACION . error
+    (17) expr -> . expr MAS term
+    (18) expr -> . expr MENOS term
+    (19) expr -> . term
+    (20) term -> . term MULTIPLICACION factor
+    (21) term -> . term DIVISION factor
+    (22) term -> . factor
+    (23) factor -> . NUMERO_ENTERO
+    (24) factor -> . NUMERO_FLOTANTE
+    (25) factor -> . VARIABLE
 
-    NUMERO_ENTERO   shift and go to state 14
-    NUMERO_FLOTANTE shift and go to state 15
+    error           shift and go to state 12
+    NUMERO_ENTERO   shift and go to state 15
+    NUMERO_FLOTANTE shift and go to state 16
     VARIABLE        shift and go to state 10
 
     expr                           shift and go to state 11
-    term                           shift and go to state 12
-    factor                         shift and go to state 13
+    term                           shift and go to state 13
+    factor                         shift and go to state 14
 
 state 9
 
-    (6) ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ . condicion PARENTESIS_DER bloque
+    (7) ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ . condicion PARENTESIS_DER bloque
     (8) condicion -> . VARIABLE MENOR_IGUAL expr
     (9) condicion -> . VARIABLE MAYOR_IGUAL expr
     (10) condicion -> . VARIABLE IGUAL expr
     (11) condicion -> . VARIABLE DIFERENTE expr
     (12) condicion -> . VARIABLE MENOR expr
     (13) condicion -> . VARIABLE MAYOR expr
+    (14) condicion -> . VARIABLE error
 
-    VARIABLE        shift and go to state 17
+    VARIABLE        shift and go to state 18
 
-    condicion                      shift and go to state 16
+    condicion                      shift and go to state 17
 
 state 10
 
-    (22) factor -> VARIABLE .
+    (25) factor -> VARIABLE .
 
-    MULTIPLICACION  reduce using rule 22 (factor -> VARIABLE .)
-    DIVISION        reduce using rule 22 (factor -> VARIABLE .)
-    MAS             reduce using rule 22 (factor -> VARIABLE .)
-    MENOS           reduce using rule 22 (factor -> VARIABLE .)
-    VARIABLE        reduce using rule 22 (factor -> VARIABLE .)
-    PALABRA_RESERVADA reduce using rule 22 (factor -> VARIABLE .)
-    $end            reduce using rule 22 (factor -> VARIABLE .)
-    PARENTESIS_DER  reduce using rule 22 (factor -> VARIABLE .)
+    MULTIPLICACION  reduce using rule 25 (factor -> VARIABLE .)
+    DIVISION        reduce using rule 25 (factor -> VARIABLE .)
+    MAS             reduce using rule 25 (factor -> VARIABLE .)
+    MENOS           reduce using rule 25 (factor -> VARIABLE .)
+    VARIABLE        reduce using rule 25 (factor -> VARIABLE .)
+    PALABRA_RESERVADA reduce using rule 25 (factor -> VARIABLE .)
+    $end            reduce using rule 25 (factor -> VARIABLE .)
+    PARENTESIS_DER  reduce using rule 25 (factor -> VARIABLE .)
 
 
 state 11
 
     (5) asignacion -> VARIABLE ASIGNACION expr .
-    (14) expr -> expr . MAS term
-    (15) expr -> expr . MENOS term
+    (17) expr -> expr . MAS term
+    (18) expr -> expr . MENOS term
 
     VARIABLE        reduce using rule 5 (asignacion -> VARIABLE ASIGNACION expr .)
     PALABRA_RESERVADA reduce using rule 5 (asignacion -> VARIABLE ASIGNACION expr .)
     $end            reduce using rule 5 (asignacion -> VARIABLE ASIGNACION expr .)
     PARENTESIS_DER  reduce using rule 5 (asignacion -> VARIABLE ASIGNACION expr .)
-    MAS             shift and go to state 18
-    MENOS           shift and go to state 19
+    MAS             shift and go to state 19
+    MENOS           shift and go to state 20
 
 
 state 12
 
-    (16) expr -> term .
-    (17) term -> term . MULTIPLICACION factor
-    (18) term -> term . DIVISION factor
+    (6) asignacion -> VARIABLE ASIGNACION error .
 
-    MAS             reduce using rule 16 (expr -> term .)
-    MENOS           reduce using rule 16 (expr -> term .)
-    VARIABLE        reduce using rule 16 (expr -> term .)
-    PALABRA_RESERVADA reduce using rule 16 (expr -> term .)
-    $end            reduce using rule 16 (expr -> term .)
-    PARENTESIS_DER  reduce using rule 16 (expr -> term .)
-    MULTIPLICACION  shift and go to state 20
-    DIVISION        shift and go to state 21
+    VARIABLE        reduce using rule 6 (asignacion -> VARIABLE ASIGNACION error .)
+    PALABRA_RESERVADA reduce using rule 6 (asignacion -> VARIABLE ASIGNACION error .)
+    $end            reduce using rule 6 (asignacion -> VARIABLE ASIGNACION error .)
+    PARENTESIS_DER  reduce using rule 6 (asignacion -> VARIABLE ASIGNACION error .)
 
 
 state 13
 
-    (19) term -> factor .
+    (19) expr -> term .
+    (20) term -> term . MULTIPLICACION factor
+    (21) term -> term . DIVISION factor
 
-    MULTIPLICACION  reduce using rule 19 (term -> factor .)
-    DIVISION        reduce using rule 19 (term -> factor .)
-    MAS             reduce using rule 19 (term -> factor .)
-    MENOS           reduce using rule 19 (term -> factor .)
-    VARIABLE        reduce using rule 19 (term -> factor .)
-    PALABRA_RESERVADA reduce using rule 19 (term -> factor .)
-    $end            reduce using rule 19 (term -> factor .)
-    PARENTESIS_DER  reduce using rule 19 (term -> factor .)
+    MAS             reduce using rule 19 (expr -> term .)
+    MENOS           reduce using rule 19 (expr -> term .)
+    VARIABLE        reduce using rule 19 (expr -> term .)
+    PALABRA_RESERVADA reduce using rule 19 (expr -> term .)
+    $end            reduce using rule 19 (expr -> term .)
+    PARENTESIS_DER  reduce using rule 19 (expr -> term .)
+    MULTIPLICACION  shift and go to state 21
+    DIVISION        shift and go to state 22
 
 
 state 14
 
-    (20) factor -> NUMERO_ENTERO .
+    (22) term -> factor .
 
-    MULTIPLICACION  reduce using rule 20 (factor -> NUMERO_ENTERO .)
-    DIVISION        reduce using rule 20 (factor -> NUMERO_ENTERO .)
-    MAS             reduce using rule 20 (factor -> NUMERO_ENTERO .)
-    MENOS           reduce using rule 20 (factor -> NUMERO_ENTERO .)
-    VARIABLE        reduce using rule 20 (factor -> NUMERO_ENTERO .)
-    PALABRA_RESERVADA reduce using rule 20 (factor -> NUMERO_ENTERO .)
-    $end            reduce using rule 20 (factor -> NUMERO_ENTERO .)
-    PARENTESIS_DER  reduce using rule 20 (factor -> NUMERO_ENTERO .)
+    MULTIPLICACION  reduce using rule 22 (term -> factor .)
+    DIVISION        reduce using rule 22 (term -> factor .)
+    MAS             reduce using rule 22 (term -> factor .)
+    MENOS           reduce using rule 22 (term -> factor .)
+    VARIABLE        reduce using rule 22 (term -> factor .)
+    PALABRA_RESERVADA reduce using rule 22 (term -> factor .)
+    $end            reduce using rule 22 (term -> factor .)
+    PARENTESIS_DER  reduce using rule 22 (term -> factor .)
 
 
 state 15
 
-    (21) factor -> NUMERO_FLOTANTE .
+    (23) factor -> NUMERO_ENTERO .
 
-    MULTIPLICACION  reduce using rule 21 (factor -> NUMERO_FLOTANTE .)
-    DIVISION        reduce using rule 21 (factor -> NUMERO_FLOTANTE .)
-    MAS             reduce using rule 21 (factor -> NUMERO_FLOTANTE .)
-    MENOS           reduce using rule 21 (factor -> NUMERO_FLOTANTE .)
-    VARIABLE        reduce using rule 21 (factor -> NUMERO_FLOTANTE .)
-    PALABRA_RESERVADA reduce using rule 21 (factor -> NUMERO_FLOTANTE .)
-    $end            reduce using rule 21 (factor -> NUMERO_FLOTANTE .)
-    PARENTESIS_DER  reduce using rule 21 (factor -> NUMERO_FLOTANTE .)
+    MULTIPLICACION  reduce using rule 23 (factor -> NUMERO_ENTERO .)
+    DIVISION        reduce using rule 23 (factor -> NUMERO_ENTERO .)
+    MAS             reduce using rule 23 (factor -> NUMERO_ENTERO .)
+    MENOS           reduce using rule 23 (factor -> NUMERO_ENTERO .)
+    VARIABLE        reduce using rule 23 (factor -> NUMERO_ENTERO .)
+    PALABRA_RESERVADA reduce using rule 23 (factor -> NUMERO_ENTERO .)
+    $end            reduce using rule 23 (factor -> NUMERO_ENTERO .)
+    PARENTESIS_DER  reduce using rule 23 (factor -> NUMERO_ENTERO .)
 
 
 state 16
 
-    (6) ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion . PARENTESIS_DER bloque
+    (24) factor -> NUMERO_FLOTANTE .
 
-    PARENTESIS_DER  shift and go to state 22
+    MULTIPLICACION  reduce using rule 24 (factor -> NUMERO_FLOTANTE .)
+    DIVISION        reduce using rule 24 (factor -> NUMERO_FLOTANTE .)
+    MAS             reduce using rule 24 (factor -> NUMERO_FLOTANTE .)
+    MENOS           reduce using rule 24 (factor -> NUMERO_FLOTANTE .)
+    VARIABLE        reduce using rule 24 (factor -> NUMERO_FLOTANTE .)
+    PALABRA_RESERVADA reduce using rule 24 (factor -> NUMERO_FLOTANTE .)
+    $end            reduce using rule 24 (factor -> NUMERO_FLOTANTE .)
+    PARENTESIS_DER  reduce using rule 24 (factor -> NUMERO_FLOTANTE .)
 
 
 state 17
+
+    (7) ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion . PARENTESIS_DER bloque
+
+    PARENTESIS_DER  shift and go to state 23
+
+
+state 18
 
     (8) condicion -> VARIABLE . MENOR_IGUAL expr
     (9) condicion -> VARIABLE . MAYOR_IGUAL expr
@@ -290,374 +309,388 @@ state 17
     (11) condicion -> VARIABLE . DIFERENTE expr
     (12) condicion -> VARIABLE . MENOR expr
     (13) condicion -> VARIABLE . MAYOR expr
+    (14) condicion -> VARIABLE . error
 
-    MENOR_IGUAL     shift and go to state 23
-    MAYOR_IGUAL     shift and go to state 24
-    IGUAL           shift and go to state 25
-    DIFERENTE       shift and go to state 26
-    MENOR           shift and go to state 27
-    MAYOR           shift and go to state 28
+    MENOR_IGUAL     shift and go to state 24
+    MAYOR_IGUAL     shift and go to state 25
+    IGUAL           shift and go to state 26
+    DIFERENTE       shift and go to state 27
+    MENOR           shift and go to state 28
+    MAYOR           shift and go to state 29
+    error           shift and go to state 30
 
-
-state 18
-
-    (14) expr -> expr MAS . term
-    (17) term -> . term MULTIPLICACION factor
-    (18) term -> . term DIVISION factor
-    (19) term -> . factor
-    (20) factor -> . NUMERO_ENTERO
-    (21) factor -> . NUMERO_FLOTANTE
-    (22) factor -> . VARIABLE
-
-    NUMERO_ENTERO   shift and go to state 14
-    NUMERO_FLOTANTE shift and go to state 15
-    VARIABLE        shift and go to state 10
-
-    term                           shift and go to state 29
-    factor                         shift and go to state 13
 
 state 19
 
-    (15) expr -> expr MENOS . term
-    (17) term -> . term MULTIPLICACION factor
-    (18) term -> . term DIVISION factor
-    (19) term -> . factor
-    (20) factor -> . NUMERO_ENTERO
-    (21) factor -> . NUMERO_FLOTANTE
-    (22) factor -> . VARIABLE
+    (17) expr -> expr MAS . term
+    (20) term -> . term MULTIPLICACION factor
+    (21) term -> . term DIVISION factor
+    (22) term -> . factor
+    (23) factor -> . NUMERO_ENTERO
+    (24) factor -> . NUMERO_FLOTANTE
+    (25) factor -> . VARIABLE
 
-    NUMERO_ENTERO   shift and go to state 14
-    NUMERO_FLOTANTE shift and go to state 15
+    NUMERO_ENTERO   shift and go to state 15
+    NUMERO_FLOTANTE shift and go to state 16
     VARIABLE        shift and go to state 10
 
-    term                           shift and go to state 30
-    factor                         shift and go to state 13
+    term                           shift and go to state 31
+    factor                         shift and go to state 14
 
 state 20
 
-    (17) term -> term MULTIPLICACION . factor
-    (20) factor -> . NUMERO_ENTERO
-    (21) factor -> . NUMERO_FLOTANTE
-    (22) factor -> . VARIABLE
+    (18) expr -> expr MENOS . term
+    (20) term -> . term MULTIPLICACION factor
+    (21) term -> . term DIVISION factor
+    (22) term -> . factor
+    (23) factor -> . NUMERO_ENTERO
+    (24) factor -> . NUMERO_FLOTANTE
+    (25) factor -> . VARIABLE
 
-    NUMERO_ENTERO   shift and go to state 14
-    NUMERO_FLOTANTE shift and go to state 15
+    NUMERO_ENTERO   shift and go to state 15
+    NUMERO_FLOTANTE shift and go to state 16
     VARIABLE        shift and go to state 10
 
-    factor                         shift and go to state 31
+    term                           shift and go to state 32
+    factor                         shift and go to state 14
 
 state 21
 
-    (18) term -> term DIVISION . factor
-    (20) factor -> . NUMERO_ENTERO
-    (21) factor -> . NUMERO_FLOTANTE
-    (22) factor -> . VARIABLE
+    (20) term -> term MULTIPLICACION . factor
+    (23) factor -> . NUMERO_ENTERO
+    (24) factor -> . NUMERO_FLOTANTE
+    (25) factor -> . VARIABLE
 
-    NUMERO_ENTERO   shift and go to state 14
-    NUMERO_FLOTANTE shift and go to state 15
+    NUMERO_ENTERO   shift and go to state 15
+    NUMERO_FLOTANTE shift and go to state 16
     VARIABLE        shift and go to state 10
 
-    factor                         shift and go to state 32
+    factor                         shift and go to state 33
 
 state 22
 
-    (6) ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER . bloque
-    (7) bloque -> . PARENTESIS_IZQ programa PARENTESIS_DER
+    (21) term -> term DIVISION . factor
+    (23) factor -> . NUMERO_ENTERO
+    (24) factor -> . NUMERO_FLOTANTE
+    (25) factor -> . VARIABLE
 
-    PARENTESIS_IZQ  shift and go to state 33
+    NUMERO_ENTERO   shift and go to state 15
+    NUMERO_FLOTANTE shift and go to state 16
+    VARIABLE        shift and go to state 10
 
-    bloque                         shift and go to state 34
+    factor                         shift and go to state 34
 
 state 23
 
-    (8) condicion -> VARIABLE MENOR_IGUAL . expr
-    (14) expr -> . expr MAS term
-    (15) expr -> . expr MENOS term
-    (16) expr -> . term
-    (17) term -> . term MULTIPLICACION factor
-    (18) term -> . term DIVISION factor
-    (19) term -> . factor
-    (20) factor -> . NUMERO_ENTERO
-    (21) factor -> . NUMERO_FLOTANTE
-    (22) factor -> . VARIABLE
+    (7) ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER . bloque
+    (15) bloque -> . PARENTESIS_IZQ programa PARENTESIS_DER
+    (16) bloque -> . PARENTESIS_IZQ error
 
-    NUMERO_ENTERO   shift and go to state 14
-    NUMERO_FLOTANTE shift and go to state 15
-    VARIABLE        shift and go to state 10
+    PARENTESIS_IZQ  shift and go to state 35
 
-    expr                           shift and go to state 35
-    term                           shift and go to state 12
-    factor                         shift and go to state 13
+    bloque                         shift and go to state 36
 
 state 24
 
-    (9) condicion -> VARIABLE MAYOR_IGUAL . expr
-    (14) expr -> . expr MAS term
-    (15) expr -> . expr MENOS term
-    (16) expr -> . term
-    (17) term -> . term MULTIPLICACION factor
-    (18) term -> . term DIVISION factor
-    (19) term -> . factor
-    (20) factor -> . NUMERO_ENTERO
-    (21) factor -> . NUMERO_FLOTANTE
-    (22) factor -> . VARIABLE
+    (8) condicion -> VARIABLE MENOR_IGUAL . expr
+    (17) expr -> . expr MAS term
+    (18) expr -> . expr MENOS term
+    (19) expr -> . term
+    (20) term -> . term MULTIPLICACION factor
+    (21) term -> . term DIVISION factor
+    (22) term -> . factor
+    (23) factor -> . NUMERO_ENTERO
+    (24) factor -> . NUMERO_FLOTANTE
+    (25) factor -> . VARIABLE
 
-    NUMERO_ENTERO   shift and go to state 14
-    NUMERO_FLOTANTE shift and go to state 15
-    VARIABLE        shift and go to state 10
-
-    expr                           shift and go to state 36
-    term                           shift and go to state 12
-    factor                         shift and go to state 13
-
-state 25
-
-    (10) condicion -> VARIABLE IGUAL . expr
-    (14) expr -> . expr MAS term
-    (15) expr -> . expr MENOS term
-    (16) expr -> . term
-    (17) term -> . term MULTIPLICACION factor
-    (18) term -> . term DIVISION factor
-    (19) term -> . factor
-    (20) factor -> . NUMERO_ENTERO
-    (21) factor -> . NUMERO_FLOTANTE
-    (22) factor -> . VARIABLE
-
-    NUMERO_ENTERO   shift and go to state 14
-    NUMERO_FLOTANTE shift and go to state 15
+    NUMERO_ENTERO   shift and go to state 15
+    NUMERO_FLOTANTE shift and go to state 16
     VARIABLE        shift and go to state 10
 
     expr                           shift and go to state 37
-    term                           shift and go to state 12
-    factor                         shift and go to state 13
+    term                           shift and go to state 13
+    factor                         shift and go to state 14
 
-state 26
+state 25
 
-    (11) condicion -> VARIABLE DIFERENTE . expr
-    (14) expr -> . expr MAS term
-    (15) expr -> . expr MENOS term
-    (16) expr -> . term
-    (17) term -> . term MULTIPLICACION factor
-    (18) term -> . term DIVISION factor
-    (19) term -> . factor
-    (20) factor -> . NUMERO_ENTERO
-    (21) factor -> . NUMERO_FLOTANTE
-    (22) factor -> . VARIABLE
+    (9) condicion -> VARIABLE MAYOR_IGUAL . expr
+    (17) expr -> . expr MAS term
+    (18) expr -> . expr MENOS term
+    (19) expr -> . term
+    (20) term -> . term MULTIPLICACION factor
+    (21) term -> . term DIVISION factor
+    (22) term -> . factor
+    (23) factor -> . NUMERO_ENTERO
+    (24) factor -> . NUMERO_FLOTANTE
+    (25) factor -> . VARIABLE
 
-    NUMERO_ENTERO   shift and go to state 14
-    NUMERO_FLOTANTE shift and go to state 15
+    NUMERO_ENTERO   shift and go to state 15
+    NUMERO_FLOTANTE shift and go to state 16
     VARIABLE        shift and go to state 10
 
     expr                           shift and go to state 38
-    term                           shift and go to state 12
-    factor                         shift and go to state 13
+    term                           shift and go to state 13
+    factor                         shift and go to state 14
 
-state 27
+state 26
 
-    (12) condicion -> VARIABLE MENOR . expr
-    (14) expr -> . expr MAS term
-    (15) expr -> . expr MENOS term
-    (16) expr -> . term
-    (17) term -> . term MULTIPLICACION factor
-    (18) term -> . term DIVISION factor
-    (19) term -> . factor
-    (20) factor -> . NUMERO_ENTERO
-    (21) factor -> . NUMERO_FLOTANTE
-    (22) factor -> . VARIABLE
+    (10) condicion -> VARIABLE IGUAL . expr
+    (17) expr -> . expr MAS term
+    (18) expr -> . expr MENOS term
+    (19) expr -> . term
+    (20) term -> . term MULTIPLICACION factor
+    (21) term -> . term DIVISION factor
+    (22) term -> . factor
+    (23) factor -> . NUMERO_ENTERO
+    (24) factor -> . NUMERO_FLOTANTE
+    (25) factor -> . VARIABLE
 
-    NUMERO_ENTERO   shift and go to state 14
-    NUMERO_FLOTANTE shift and go to state 15
+    NUMERO_ENTERO   shift and go to state 15
+    NUMERO_FLOTANTE shift and go to state 16
     VARIABLE        shift and go to state 10
 
     expr                           shift and go to state 39
-    term                           shift and go to state 12
-    factor                         shift and go to state 13
+    term                           shift and go to state 13
+    factor                         shift and go to state 14
 
-state 28
+state 27
 
-    (13) condicion -> VARIABLE MAYOR . expr
-    (14) expr -> . expr MAS term
-    (15) expr -> . expr MENOS term
-    (16) expr -> . term
-    (17) term -> . term MULTIPLICACION factor
-    (18) term -> . term DIVISION factor
-    (19) term -> . factor
-    (20) factor -> . NUMERO_ENTERO
-    (21) factor -> . NUMERO_FLOTANTE
-    (22) factor -> . VARIABLE
+    (11) condicion -> VARIABLE DIFERENTE . expr
+    (17) expr -> . expr MAS term
+    (18) expr -> . expr MENOS term
+    (19) expr -> . term
+    (20) term -> . term MULTIPLICACION factor
+    (21) term -> . term DIVISION factor
+    (22) term -> . factor
+    (23) factor -> . NUMERO_ENTERO
+    (24) factor -> . NUMERO_FLOTANTE
+    (25) factor -> . VARIABLE
 
-    NUMERO_ENTERO   shift and go to state 14
-    NUMERO_FLOTANTE shift and go to state 15
+    NUMERO_ENTERO   shift and go to state 15
+    NUMERO_FLOTANTE shift and go to state 16
     VARIABLE        shift and go to state 10
 
     expr                           shift and go to state 40
-    term                           shift and go to state 12
-    factor                         shift and go to state 13
+    term                           shift and go to state 13
+    factor                         shift and go to state 14
+
+state 28
+
+    (12) condicion -> VARIABLE MENOR . expr
+    (17) expr -> . expr MAS term
+    (18) expr -> . expr MENOS term
+    (19) expr -> . term
+    (20) term -> . term MULTIPLICACION factor
+    (21) term -> . term DIVISION factor
+    (22) term -> . factor
+    (23) factor -> . NUMERO_ENTERO
+    (24) factor -> . NUMERO_FLOTANTE
+    (25) factor -> . VARIABLE
+
+    NUMERO_ENTERO   shift and go to state 15
+    NUMERO_FLOTANTE shift and go to state 16
+    VARIABLE        shift and go to state 10
+
+    expr                           shift and go to state 41
+    term                           shift and go to state 13
+    factor                         shift and go to state 14
 
 state 29
 
-    (14) expr -> expr MAS term .
-    (17) term -> term . MULTIPLICACION factor
-    (18) term -> term . DIVISION factor
+    (13) condicion -> VARIABLE MAYOR . expr
+    (17) expr -> . expr MAS term
+    (18) expr -> . expr MENOS term
+    (19) expr -> . term
+    (20) term -> . term MULTIPLICACION factor
+    (21) term -> . term DIVISION factor
+    (22) term -> . factor
+    (23) factor -> . NUMERO_ENTERO
+    (24) factor -> . NUMERO_FLOTANTE
+    (25) factor -> . VARIABLE
 
-    MAS             reduce using rule 14 (expr -> expr MAS term .)
-    MENOS           reduce using rule 14 (expr -> expr MAS term .)
-    VARIABLE        reduce using rule 14 (expr -> expr MAS term .)
-    PALABRA_RESERVADA reduce using rule 14 (expr -> expr MAS term .)
-    $end            reduce using rule 14 (expr -> expr MAS term .)
-    PARENTESIS_DER  reduce using rule 14 (expr -> expr MAS term .)
-    MULTIPLICACION  shift and go to state 20
-    DIVISION        shift and go to state 21
+    NUMERO_ENTERO   shift and go to state 15
+    NUMERO_FLOTANTE shift and go to state 16
+    VARIABLE        shift and go to state 10
 
+    expr                           shift and go to state 42
+    term                           shift and go to state 13
+    factor                         shift and go to state 14
 
 state 30
 
-    (15) expr -> expr MENOS term .
-    (17) term -> term . MULTIPLICACION factor
-    (18) term -> term . DIVISION factor
+    (14) condicion -> VARIABLE error .
 
-    MAS             reduce using rule 15 (expr -> expr MENOS term .)
-    MENOS           reduce using rule 15 (expr -> expr MENOS term .)
-    VARIABLE        reduce using rule 15 (expr -> expr MENOS term .)
-    PALABRA_RESERVADA reduce using rule 15 (expr -> expr MENOS term .)
-    $end            reduce using rule 15 (expr -> expr MENOS term .)
-    PARENTESIS_DER  reduce using rule 15 (expr -> expr MENOS term .)
-    MULTIPLICACION  shift and go to state 20
-    DIVISION        shift and go to state 21
+    PARENTESIS_DER  reduce using rule 14 (condicion -> VARIABLE error .)
 
 
 state 31
 
-    (17) term -> term MULTIPLICACION factor .
+    (17) expr -> expr MAS term .
+    (20) term -> term . MULTIPLICACION factor
+    (21) term -> term . DIVISION factor
 
-    MULTIPLICACION  reduce using rule 17 (term -> term MULTIPLICACION factor .)
-    DIVISION        reduce using rule 17 (term -> term MULTIPLICACION factor .)
-    MAS             reduce using rule 17 (term -> term MULTIPLICACION factor .)
-    MENOS           reduce using rule 17 (term -> term MULTIPLICACION factor .)
-    VARIABLE        reduce using rule 17 (term -> term MULTIPLICACION factor .)
-    PALABRA_RESERVADA reduce using rule 17 (term -> term MULTIPLICACION factor .)
-    $end            reduce using rule 17 (term -> term MULTIPLICACION factor .)
-    PARENTESIS_DER  reduce using rule 17 (term -> term MULTIPLICACION factor .)
+    MAS             reduce using rule 17 (expr -> expr MAS term .)
+    MENOS           reduce using rule 17 (expr -> expr MAS term .)
+    VARIABLE        reduce using rule 17 (expr -> expr MAS term .)
+    PALABRA_RESERVADA reduce using rule 17 (expr -> expr MAS term .)
+    $end            reduce using rule 17 (expr -> expr MAS term .)
+    PARENTESIS_DER  reduce using rule 17 (expr -> expr MAS term .)
+    MULTIPLICACION  shift and go to state 21
+    DIVISION        shift and go to state 22
 
 
 state 32
 
-    (18) term -> term DIVISION factor .
+    (18) expr -> expr MENOS term .
+    (20) term -> term . MULTIPLICACION factor
+    (21) term -> term . DIVISION factor
 
-    MULTIPLICACION  reduce using rule 18 (term -> term DIVISION factor .)
-    DIVISION        reduce using rule 18 (term -> term DIVISION factor .)
-    MAS             reduce using rule 18 (term -> term DIVISION factor .)
-    MENOS           reduce using rule 18 (term -> term DIVISION factor .)
-    VARIABLE        reduce using rule 18 (term -> term DIVISION factor .)
-    PALABRA_RESERVADA reduce using rule 18 (term -> term DIVISION factor .)
-    $end            reduce using rule 18 (term -> term DIVISION factor .)
-    PARENTESIS_DER  reduce using rule 18 (term -> term DIVISION factor .)
+    MAS             reduce using rule 18 (expr -> expr MENOS term .)
+    MENOS           reduce using rule 18 (expr -> expr MENOS term .)
+    VARIABLE        reduce using rule 18 (expr -> expr MENOS term .)
+    PALABRA_RESERVADA reduce using rule 18 (expr -> expr MENOS term .)
+    $end            reduce using rule 18 (expr -> expr MENOS term .)
+    PARENTESIS_DER  reduce using rule 18 (expr -> expr MENOS term .)
+    MULTIPLICACION  shift and go to state 21
+    DIVISION        shift and go to state 22
 
 
 state 33
 
-    (7) bloque -> PARENTESIS_IZQ . programa PARENTESIS_DER
+    (20) term -> term MULTIPLICACION factor .
+
+    MULTIPLICACION  reduce using rule 20 (term -> term MULTIPLICACION factor .)
+    DIVISION        reduce using rule 20 (term -> term MULTIPLICACION factor .)
+    MAS             reduce using rule 20 (term -> term MULTIPLICACION factor .)
+    MENOS           reduce using rule 20 (term -> term MULTIPLICACION factor .)
+    VARIABLE        reduce using rule 20 (term -> term MULTIPLICACION factor .)
+    PALABRA_RESERVADA reduce using rule 20 (term -> term MULTIPLICACION factor .)
+    $end            reduce using rule 20 (term -> term MULTIPLICACION factor .)
+    PARENTESIS_DER  reduce using rule 20 (term -> term MULTIPLICACION factor .)
+
+
+state 34
+
+    (21) term -> term DIVISION factor .
+
+    MULTIPLICACION  reduce using rule 21 (term -> term DIVISION factor .)
+    DIVISION        reduce using rule 21 (term -> term DIVISION factor .)
+    MAS             reduce using rule 21 (term -> term DIVISION factor .)
+    MENOS           reduce using rule 21 (term -> term DIVISION factor .)
+    VARIABLE        reduce using rule 21 (term -> term DIVISION factor .)
+    PALABRA_RESERVADA reduce using rule 21 (term -> term DIVISION factor .)
+    $end            reduce using rule 21 (term -> term DIVISION factor .)
+    PARENTESIS_DER  reduce using rule 21 (term -> term DIVISION factor .)
+
+
+state 35
+
+    (15) bloque -> PARENTESIS_IZQ . programa PARENTESIS_DER
+    (16) bloque -> PARENTESIS_IZQ . error
     (1) programa -> . instruccion
     (2) programa -> . programa instruccion
     (3) instruccion -> . asignacion
     (4) instruccion -> . ciclo
     (5) asignacion -> . VARIABLE ASIGNACION expr
-    (6) ciclo -> . PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque
+    (6) asignacion -> . VARIABLE ASIGNACION error
+    (7) ciclo -> . PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque
 
+    error           shift and go to state 44
     VARIABLE        shift and go to state 5
     PALABRA_RESERVADA shift and go to state 6
 
-    programa                       shift and go to state 41
+    programa                       shift and go to state 43
     instruccion                    shift and go to state 2
     asignacion                     shift and go to state 3
     ciclo                          shift and go to state 4
 
-state 34
-
-    (6) ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque .
-
-    VARIABLE        reduce using rule 6 (ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque .)
-    PALABRA_RESERVADA reduce using rule 6 (ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque .)
-    $end            reduce using rule 6 (ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque .)
-    PARENTESIS_DER  reduce using rule 6 (ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque .)
-
-
-state 35
-
-    (8) condicion -> VARIABLE MENOR_IGUAL expr .
-    (14) expr -> expr . MAS term
-    (15) expr -> expr . MENOS term
-
-    PARENTESIS_DER  reduce using rule 8 (condicion -> VARIABLE MENOR_IGUAL expr .)
-    MAS             shift and go to state 18
-    MENOS           shift and go to state 19
-
-
 state 36
 
-    (9) condicion -> VARIABLE MAYOR_IGUAL expr .
-    (14) expr -> expr . MAS term
-    (15) expr -> expr . MENOS term
+    (7) ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque .
 
-    PARENTESIS_DER  reduce using rule 9 (condicion -> VARIABLE MAYOR_IGUAL expr .)
-    MAS             shift and go to state 18
-    MENOS           shift and go to state 19
+    VARIABLE        reduce using rule 7 (ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque .)
+    PALABRA_RESERVADA reduce using rule 7 (ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque .)
+    $end            reduce using rule 7 (ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque .)
+    PARENTESIS_DER  reduce using rule 7 (ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque .)
 
 
 state 37
 
-    (10) condicion -> VARIABLE IGUAL expr .
-    (14) expr -> expr . MAS term
-    (15) expr -> expr . MENOS term
+    (8) condicion -> VARIABLE MENOR_IGUAL expr .
+    (17) expr -> expr . MAS term
+    (18) expr -> expr . MENOS term
 
-    PARENTESIS_DER  reduce using rule 10 (condicion -> VARIABLE IGUAL expr .)
-    MAS             shift and go to state 18
-    MENOS           shift and go to state 19
+    PARENTESIS_DER  reduce using rule 8 (condicion -> VARIABLE MENOR_IGUAL expr .)
+    MAS             shift and go to state 19
+    MENOS           shift and go to state 20
 
 
 state 38
 
-    (11) condicion -> VARIABLE DIFERENTE expr .
-    (14) expr -> expr . MAS term
-    (15) expr -> expr . MENOS term
+    (9) condicion -> VARIABLE MAYOR_IGUAL expr .
+    (17) expr -> expr . MAS term
+    (18) expr -> expr . MENOS term
 
-    PARENTESIS_DER  reduce using rule 11 (condicion -> VARIABLE DIFERENTE expr .)
-    MAS             shift and go to state 18
-    MENOS           shift and go to state 19
+    PARENTESIS_DER  reduce using rule 9 (condicion -> VARIABLE MAYOR_IGUAL expr .)
+    MAS             shift and go to state 19
+    MENOS           shift and go to state 20
 
 
 state 39
 
-    (12) condicion -> VARIABLE MENOR expr .
-    (14) expr -> expr . MAS term
-    (15) expr -> expr . MENOS term
+    (10) condicion -> VARIABLE IGUAL expr .
+    (17) expr -> expr . MAS term
+    (18) expr -> expr . MENOS term
 
-    PARENTESIS_DER  reduce using rule 12 (condicion -> VARIABLE MENOR expr .)
-    MAS             shift and go to state 18
-    MENOS           shift and go to state 19
+    PARENTESIS_DER  reduce using rule 10 (condicion -> VARIABLE IGUAL expr .)
+    MAS             shift and go to state 19
+    MENOS           shift and go to state 20
 
 
 state 40
 
-    (13) condicion -> VARIABLE MAYOR expr .
-    (14) expr -> expr . MAS term
-    (15) expr -> expr . MENOS term
+    (11) condicion -> VARIABLE DIFERENTE expr .
+    (17) expr -> expr . MAS term
+    (18) expr -> expr . MENOS term
 
-    PARENTESIS_DER  reduce using rule 13 (condicion -> VARIABLE MAYOR expr .)
-    MAS             shift and go to state 18
-    MENOS           shift and go to state 19
+    PARENTESIS_DER  reduce using rule 11 (condicion -> VARIABLE DIFERENTE expr .)
+    MAS             shift and go to state 19
+    MENOS           shift and go to state 20
 
 
 state 41
 
-    (7) bloque -> PARENTESIS_IZQ programa . PARENTESIS_DER
+    (12) condicion -> VARIABLE MENOR expr .
+    (17) expr -> expr . MAS term
+    (18) expr -> expr . MENOS term
+
+    PARENTESIS_DER  reduce using rule 12 (condicion -> VARIABLE MENOR expr .)
+    MAS             shift and go to state 19
+    MENOS           shift and go to state 20
+
+
+state 42
+
+    (13) condicion -> VARIABLE MAYOR expr .
+    (17) expr -> expr . MAS term
+    (18) expr -> expr . MENOS term
+
+    PARENTESIS_DER  reduce using rule 13 (condicion -> VARIABLE MAYOR expr .)
+    MAS             shift and go to state 19
+    MENOS           shift and go to state 20
+
+
+state 43
+
+    (15) bloque -> PARENTESIS_IZQ programa . PARENTESIS_DER
     (2) programa -> programa . instruccion
     (3) instruccion -> . asignacion
     (4) instruccion -> . ciclo
     (5) asignacion -> . VARIABLE ASIGNACION expr
-    (6) ciclo -> . PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque
+    (6) asignacion -> . VARIABLE ASIGNACION error
+    (7) ciclo -> . PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque
 
-    PARENTESIS_DER  shift and go to state 42
+    PARENTESIS_DER  shift and go to state 45
     VARIABLE        shift and go to state 5
     PALABRA_RESERVADA shift and go to state 6
 
@@ -665,12 +698,22 @@ state 41
     asignacion                     shift and go to state 3
     ciclo                          shift and go to state 4
 
-state 42
+state 44
 
-    (7) bloque -> PARENTESIS_IZQ programa PARENTESIS_DER .
+    (16) bloque -> PARENTESIS_IZQ error .
 
-    VARIABLE        reduce using rule 7 (bloque -> PARENTESIS_IZQ programa PARENTESIS_DER .)
-    PALABRA_RESERVADA reduce using rule 7 (bloque -> PARENTESIS_IZQ programa PARENTESIS_DER .)
-    $end            reduce using rule 7 (bloque -> PARENTESIS_IZQ programa PARENTESIS_DER .)
-    PARENTESIS_DER  reduce using rule 7 (bloque -> PARENTESIS_IZQ programa PARENTESIS_DER .)
+    VARIABLE        reduce using rule 16 (bloque -> PARENTESIS_IZQ error .)
+    PALABRA_RESERVADA reduce using rule 16 (bloque -> PARENTESIS_IZQ error .)
+    $end            reduce using rule 16 (bloque -> PARENTESIS_IZQ error .)
+    PARENTESIS_DER  reduce using rule 16 (bloque -> PARENTESIS_IZQ error .)
+
+
+state 45
+
+    (15) bloque -> PARENTESIS_IZQ programa PARENTESIS_DER .
+
+    VARIABLE        reduce using rule 15 (bloque -> PARENTESIS_IZQ programa PARENTESIS_DER .)
+    PALABRA_RESERVADA reduce using rule 15 (bloque -> PARENTESIS_IZQ programa PARENTESIS_DER .)
+    $end            reduce using rule 15 (bloque -> PARENTESIS_IZQ programa PARENTESIS_DER .)
+    PARENTESIS_DER  reduce using rule 15 (bloque -> PARENTESIS_IZQ programa PARENTESIS_DER .)
 
