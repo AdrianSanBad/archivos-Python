@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'ASIGNACION COMENTARIO DIVISION MAS MENOS MULTIPLICACION NUMERO_ENTERO NUMERO_FLOTANTE PARENTESIS_DER PARENTESIS_IZQ VARIABLEprograma : asignacion\n                | exprasignacion : VARIABLE ASIGNACION exprexpr : expr MAS term\n            | expr MENOS term\n            | termterm : term MULTIPLICACION factor\n            | term DIVISION factor\n            | factorfactor : PARENTESIS_IZQ expr PARENTESIS_DER\n              | NUMERO_ENTERO\n              | NUMERO_FLOTANTE\n              | VARIABLE'
+_lr_signature = 'ASIGNACION COMENTARIO DIFERENTE DIVISION IGUAL MAS MAYOR MAYOR_IGUAL MENOR MENOR_IGUAL MENOS MULTIPLICACION NUMERO_ENTERO NUMERO_FLOTANTE PALABRA_RESERVADA PARENTESIS_DER PARENTESIS_IZQ VARIABLEprograma : instruccion\n                | programa instruccioninstruccion : asignacion\n                   | cicloasignacion : VARIABLE ASIGNACION exprciclo : PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloquebloque : PARENTESIS_IZQ programa PARENTESIS_DERcondicion : VARIABLE MENOR_IGUAL expr \n                 | VARIABLE MAYOR_IGUAL expr \n                 | VARIABLE IGUAL expr \n                 | VARIABLE DIFERENTE expr \n                 | VARIABLE MENOR expr \n                 | VARIABLE MAYOR exprexpr : expr MAS term \n           | expr MENOS term \n           | termterm : term MULTIPLICACION factor \n           | term DIVISION factor \n           | factorfactor : NUMERO_ENTERO \n              | NUMERO_FLOTANTE \n              | VARIABLE'
     
-_lr_action_items = {'VARIABLE':([0,7,10,11,12,13,14,],[4,16,16,16,16,16,16,]),'PARENTESIS_IZQ':([0,7,10,11,12,13,14,],[7,7,7,7,7,7,7,]),'NUMERO_ENTERO':([0,7,10,11,12,13,14,],[8,8,8,8,8,8,8,]),'NUMERO_FLOTANTE':([0,7,10,11,12,13,14,],[9,9,9,9,9,9,9,]),'$end':([1,2,3,4,5,6,8,9,16,17,18,19,20,21,22,],[0,-1,-2,-13,-6,-9,-11,-12,-13,-4,-5,-3,-7,-8,-10,]),'MAS':([3,4,5,6,8,9,15,16,17,18,19,20,21,22,],[10,-13,-6,-9,-11,-12,10,-13,-4,-5,10,-7,-8,-10,]),'MENOS':([3,4,5,6,8,9,15,16,17,18,19,20,21,22,],[11,-13,-6,-9,-11,-12,11,-13,-4,-5,11,-7,-8,-10,]),'ASIGNACION':([4,],[12,]),'MULTIPLICACION':([4,5,6,8,9,16,17,18,20,21,22,],[-13,13,-9,-11,-12,-13,13,13,-7,-8,-10,]),'DIVISION':([4,5,6,8,9,16,17,18,20,21,22,],[-13,14,-9,-11,-12,-13,14,14,-7,-8,-10,]),'PARENTESIS_DER':([5,6,8,9,15,16,17,18,20,21,22,],[-6,-9,-11,-12,22,-13,-4,-5,-7,-8,-10,]),}
+_lr_action_items = {'VARIABLE':([0,1,2,3,4,7,8,9,10,11,12,13,14,15,18,19,20,21,23,24,25,26,27,28,29,30,31,32,33,34,41,42,],[5,5,-1,-3,-4,-2,10,17,-22,-5,-16,-19,-20,-21,10,10,10,10,10,10,10,10,10,10,-14,-15,-17,-18,5,-6,5,-7,]),'PALABRA_RESERVADA':([0,1,2,3,4,7,10,11,12,13,14,15,29,30,31,32,33,34,41,42,],[6,6,-1,-3,-4,-2,-22,-5,-16,-19,-20,-21,-14,-15,-17,-18,6,-6,6,-7,]),'$end':([1,2,3,4,7,10,11,12,13,14,15,29,30,31,32,34,42,],[0,-1,-3,-4,-2,-22,-5,-16,-19,-20,-21,-14,-15,-17,-18,-6,-7,]),'PARENTESIS_DER':([2,3,4,7,10,11,12,13,14,15,16,29,30,31,32,34,35,36,37,38,39,40,41,42,],[-1,-3,-4,-2,-22,-5,-16,-19,-20,-21,22,-14,-15,-17,-18,-6,-8,-9,-10,-11,-12,-13,42,-7,]),'ASIGNACION':([5,],[8,]),'PARENTESIS_IZQ':([6,22,],[9,33,]),'NUMERO_ENTERO':([8,18,19,20,21,23,24,25,26,27,28,],[14,14,14,14,14,14,14,14,14,14,14,]),'NUMERO_FLOTANTE':([8,18,19,20,21,23,24,25,26,27,28,],[15,15,15,15,15,15,15,15,15,15,15,]),'MULTIPLICACION':([10,12,13,14,15,29,30,31,32,],[-22,20,-19,-20,-21,20,20,-17,-18,]),'DIVISION':([10,12,13,14,15,29,30,31,32,],[-22,21,-19,-20,-21,21,21,-17,-18,]),'MAS':([10,11,12,13,14,15,29,30,31,32,35,36,37,38,39,40,],[-22,18,-16,-19,-20,-21,-14,-15,-17,-18,18,18,18,18,18,18,]),'MENOS':([10,11,12,13,14,15,29,30,31,32,35,36,37,38,39,40,],[-22,19,-16,-19,-20,-21,-14,-15,-17,-18,19,19,19,19,19,19,]),'MENOR_IGUAL':([17,],[23,]),'MAYOR_IGUAL':([17,],[24,]),'IGUAL':([17,],[25,]),'DIFERENTE':([17,],[26,]),'MENOR':([17,],[27,]),'MAYOR':([17,],[28,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'programa':([0,],[1,]),'asignacion':([0,],[2,]),'expr':([0,7,12,],[3,15,19,]),'term':([0,7,10,11,12,],[5,5,17,18,5,]),'factor':([0,7,10,11,12,13,14,],[6,6,6,6,6,20,21,]),}
+_lr_goto_items = {'programa':([0,33,],[1,41,]),'instruccion':([0,1,33,41,],[2,7,2,7,]),'asignacion':([0,1,33,41,],[3,3,3,3,]),'ciclo':([0,1,33,41,],[4,4,4,4,]),'expr':([8,23,24,25,26,27,28,],[11,35,36,37,38,39,40,]),'term':([8,18,19,23,24,25,26,27,28,],[12,29,30,12,12,12,12,12,12,]),'factor':([8,18,19,20,21,23,24,25,26,27,28,],[13,13,13,31,32,13,13,13,13,13,13,]),'condicion':([9,],[16,]),'bloque':([22,],[34,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,17 +27,26 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> programa","S'",1,None,None,None),
-  ('programa -> asignacion','programa',1,'p_programa','analizadorSintactico.py',55),
-  ('programa -> expr','programa',1,'p_programa','analizadorSintactico.py',56),
-  ('asignacion -> VARIABLE ASIGNACION expr','asignacion',3,'p_asignacion','analizadorSintactico.py',60),
-  ('expr -> expr MAS term','expr',3,'p_expr','analizadorSintactico.py',64),
-  ('expr -> expr MENOS term','expr',3,'p_expr','analizadorSintactico.py',65),
-  ('expr -> term','expr',1,'p_expr','analizadorSintactico.py',66),
-  ('term -> term MULTIPLICACION factor','term',3,'p_term','analizadorSintactico.py',73),
-  ('term -> term DIVISION factor','term',3,'p_term','analizadorSintactico.py',74),
-  ('term -> factor','term',1,'p_term','analizadorSintactico.py',75),
-  ('factor -> PARENTESIS_IZQ expr PARENTESIS_DER','factor',3,'p_factor','analizadorSintactico.py',82),
-  ('factor -> NUMERO_ENTERO','factor',1,'p_factor','analizadorSintactico.py',83),
-  ('factor -> NUMERO_FLOTANTE','factor',1,'p_factor','analizadorSintactico.py',84),
-  ('factor -> VARIABLE','factor',1,'p_factor','analizadorSintactico.py',85),
+  ('programa -> instruccion','programa',1,'p_programa','analizadorSintactico.py',72),
+  ('programa -> programa instruccion','programa',2,'p_programa','analizadorSintactico.py',73),
+  ('instruccion -> asignacion','instruccion',1,'p_instruccion','analizadorSintactico.py',80),
+  ('instruccion -> ciclo','instruccion',1,'p_instruccion','analizadorSintactico.py',81),
+  ('asignacion -> VARIABLE ASIGNACION expr','asignacion',3,'p_asignacion','analizadorSintactico.py',85),
+  ('ciclo -> PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque','ciclo',5,'p_ciclo','analizadorSintactico.py',90),
+  ('bloque -> PARENTESIS_IZQ programa PARENTESIS_DER','bloque',3,'p_bloque','analizadorSintactico.py',94),
+  ('condicion -> VARIABLE MENOR_IGUAL expr','condicion',3,'p_condicion','analizadorSintactico.py',98),
+  ('condicion -> VARIABLE MAYOR_IGUAL expr','condicion',3,'p_condicion','analizadorSintactico.py',99),
+  ('condicion -> VARIABLE IGUAL expr','condicion',3,'p_condicion','analizadorSintactico.py',100),
+  ('condicion -> VARIABLE DIFERENTE expr','condicion',3,'p_condicion','analizadorSintactico.py',101),
+  ('condicion -> VARIABLE MENOR expr','condicion',3,'p_condicion','analizadorSintactico.py',102),
+  ('condicion -> VARIABLE MAYOR expr','condicion',3,'p_condicion','analizadorSintactico.py',103),
+  ('expr -> expr MAS term','expr',3,'p_expr','analizadorSintactico.py',109),
+  ('expr -> expr MENOS term','expr',3,'p_expr','analizadorSintactico.py',110),
+  ('expr -> term','expr',1,'p_expr','analizadorSintactico.py',111),
+  ('term -> term MULTIPLICACION factor','term',3,'p_term','analizadorSintactico.py',118),
+  ('term -> term DIVISION factor','term',3,'p_term','analizadorSintactico.py',119),
+  ('term -> factor','term',1,'p_term','analizadorSintactico.py',120),
+  ('factor -> NUMERO_ENTERO','factor',1,'p_factor','analizadorSintactico.py',127),
+  ('factor -> NUMERO_FLOTANTE','factor',1,'p_factor','analizadorSintactico.py',128),
+  ('factor -> VARIABLE','factor',1,'p_factor','analizadorSintactico.py',129),
 ]

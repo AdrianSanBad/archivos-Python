@@ -1,7 +1,7 @@
 import ply.lex as lex
 import ply.yacc as yacc
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import filedialog
 
 # Definición de tokens
 tokens = [
@@ -58,7 +58,7 @@ t_ignore = ' \t\n'
 
 # Manejo de errores léxicos
 def t_error(t):
-    print(f"Carácter ilegal '{t.value[0]}'")
+    texto_sintactico.insert(tk.END, f"Error léxico: Carácter ilegal '{t.value[0]}'\n")
     t.lexer.skip(1)
 
 # Construcción del lexer
@@ -95,37 +95,37 @@ def p_bloque(p):
     p[0] = p[2]
 
 def p_condicion(p):
-    '''condicion : VARIABLE MENOR_IGUAL expr
-                 | VARIABLE MAYOR_IGUAL expr
-                 | VARIABLE IGUAL expr
-                 | VARIABLE DIFERENTE expr
-                 | VARIABLE MENOR expr
+    '''condicion : VARIABLE MENOR_IGUAL expr 
+                 | VARIABLE MAYOR_IGUAL expr 
+                 | VARIABLE IGUAL expr 
+                 | VARIABLE DIFERENTE expr 
+                 | VARIABLE MENOR expr 
                  | VARIABLE MAYOR expr'''
     if p[1] not in variables_definidas:
         raise ValueError(f"Variable no definida: {p[1]}")
     p[0] = ('condicion', p[1], p[2], p[3])
 
 def p_expr(p):
-    '''expr : expr MAS term
-            | expr MENOS term
-            | term'''
+    '''expr : expr MAS term 
+           | expr MENOS term 
+           | term'''
     if len(p) == 4:
         p[0] = ('expr', p[1], p[2], p[3])
     else:
         p[0] = p[1]
 
 def p_term(p):
-    '''term : term MULTIPLICACION factor
-            | term DIVISION factor
-            | factor'''
+    '''term : term MULTIPLICACION factor 
+           | term DIVISION factor 
+           | factor'''
     if len(p) == 4:
         p[0] = ('term', p[1], p[2], p[3])
     else:
         p[0] = p[1]
 
 def p_factor(p):
-    '''factor : NUMERO_ENTERO
-              | NUMERO_FLOTANTE
+    '''factor : NUMERO_ENTERO 
+              | NUMERO_FLOTANTE 
               | VARIABLE'''
     if isinstance(p[1], str) and p[1] not in variables_definidas:
         raise ValueError(f"Variable no definida: {p[1]}")
@@ -133,7 +133,10 @@ def p_factor(p):
 
 # Manejo de errores sintácticos
 def p_error(p):
-    print(f"Error de sintaxis: Token inesperado '{p.value}' en la línea {p.lineno}" if p else "Fin inesperado.")
+    if p:
+        texto_sintactico.insert(tk.END, f"Error de sintaxis: Token inesperado '{p.value}' en la línea {p.lineno}\n")
+    else:
+        texto_sintactico.insert(tk.END, "Error de sintaxis: Fin inesperado del archivo.\n")
 
 # Construcción del parser
 parser = yacc.yacc()
@@ -142,17 +145,27 @@ parser = yacc.yacc()
 def analizar(codigo):
     global variables_definidas
     variables_definidas = set()  # Reiniciar variables definidas
+    texto_lexico.delete('1.0', tk.END)
+    texto_sintactico.delete('1.0', tk.END)
+    texto_semantico.delete('1.0', tk.END)
+
     lexer.input(codigo)
     tokens_lexicos = [f"{token.value} ({token.type})" for token in lexer]
+    texto_lexico.insert(tk.END, "\n".join(tokens_lexicos) + "\n")
+
     try:
         resultado = parser.parse(codigo)
-        tokens_sintacticos = str(resultado)
-        semantico = "Análisis semántico completado sin errores."
+        tokens_sintacticos = "\n".join(str(item) for item in resultado) if resultado else "No se generaron tokens sintácticos."
+        texto_sintactico.insert(tk.END, tokens_sintacticos + "\n")
+        semantico = f"Variables definidas: {', '.join(variables_definidas)}\n"
     except ValueError as e:
-        semantico = str(e)
+        semantico = f"Error semántico: {e}\n"
+        texto_sintactico.insert(tk.END, "Error en el análisis sintáctico.\n")
     except Exception as e:
-        semantico = f"Error: {e}"
-    actualizar_interfaz(tokens_lexicos, tokens_sintacticos, semantico)
+        semantico = f"Error: {e}\n"
+        texto_sintactico.insert(tk.END, "Error en el análisis sintáctico.\n")
+
+    texto_semantico.insert(tk.END, semantico)
 
 def abrir_archivo():
     ruta = filedialog.askopenfilename(filetypes=[("Archivos de texto", "*.txt")])
@@ -163,18 +176,10 @@ def abrir_archivo():
         texto_codigo.delete('1.0', tk.END)
         texto_codigo.insert(tk.END, contenido)
 
-def actualizar_interfaz(tokens_lexicos, tokens_sintacticos, semantico):
-    texto_lexico.delete('1.0', tk.END)
-    texto_lexico.insert(tk.END, "\n".join(tokens_lexicos))
-    texto_sintactico.delete('1.0', tk.END)
-    texto_sintactico.insert(tk.END, tokens_sintacticos)
-    texto_semantico.delete('1.0', tk.END)
-    texto_semantico.insert(tk.END, semantico)
-
 def ejecutar_analisis():
     codigo = texto_codigo.get('1.0', tk.END).strip()
     if not codigo:
-        messagebox.showerror("Error", "El archivo está vacío.")
+        texto_sintactico.insert(tk.END, "Error: El archivo está vacío.\n")
         return
     analizar(codigo)
 
