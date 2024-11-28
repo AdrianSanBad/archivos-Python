@@ -1,5 +1,5 @@
-import ply.lex as lex
-import ply.yacc as yacc
+import ply.lex as lex #importa la librería ply.lex para hacer el análisis léxico
+import ply.yacc as yacc #importa la librería ply.yacc para hacer el análisis sintáctico
 
 # Definición de tokens
 tokens = [
@@ -103,7 +103,7 @@ def p_error(p):
     else:
         print("Error de sintaxis en entrada.")
 
-# Construcción del parser
+# Construcción del parser que utiliza la gramática definida anteriormente
 parser = yacc.yacc()
 
 # Función principal para analizar la entrada
