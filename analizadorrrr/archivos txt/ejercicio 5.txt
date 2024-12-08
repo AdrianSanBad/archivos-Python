@@ -1,0 +1,5 @@
+x = 5
+| Este es un comentario |
+ciclo(x <= 3) (
+    x = x + 1
+)

@@ -1,4 +1,3 @@
-#librerias
 import ply.lex as lex
 import ply.yacc as yacc
 import tkinter as tk
@@ -41,12 +40,12 @@ def t_COMENTARIO(t):
 
 def t_NUMERO_FLOTANTE(t):
     r'\d+\.\d+'
-    t.value = float(t.value)  # Convertir a tipo float
+    t.value = float(t.value)
     return t
 
 def t_NUMERO_ENTERO(t):
     r'\d+'
-    t.value = int(t.value)  # Convertir a tipo entero
+    t.value = int(t.value)
     return t
 
 def t_VARIABLE(t):
@@ -60,7 +59,7 @@ t_ignore = ' \t\n'
 # Manejo de errores léxicos
 def t_error(t):
     texto_sintactico.insert(tk.END, f"Error léxico: Carácter ilegal '{t.value[0]}'\n")
-    t.lexer.skip(1)  # Omitir el carácter ilegal
+    t.lexer.skip(1)
 
 # Construcción del lexer
 lexer = lex.lex()
@@ -73,19 +72,19 @@ def p_programa(p):
     '''programa : instruccion
                 | programa instruccion'''
     if len(p) == 2:
-        p[0] = [p[1]]  # Caso base
+        p[0] = [p[1]]
     else:
-        p[0] = p[1] + [p[2]]  # Concatenar instrucciones
+        p[0] = p[1] + [p[2]]
 
 def p_instruccion(p):
     '''instruccion : asignacion
                    | ciclo'''
-    p[0] = p[1]  # Devolver la instrucción
+    p[0] = p[1]
 
 def p_asignacion(p):
     '''asignacion : VARIABLE ASIGNACION expr'''
     variables_definidas.add(p[1])  # Registrar la variable como definida
-    p[0] = ('asignacion', p[1], p[3])  # Representación de la asignación
+    p[0] = ('asignacion', p[1], p[3])
 
 def p_asignacion_error(p):
     '''asignacion : VARIABLE ASIGNACION error'''
@@ -93,7 +92,7 @@ def p_asignacion_error(p):
 
 def p_ciclo(p):
     '''ciclo : PALABRA_RESERVADA PARENTESIS_IZQ condicion PARENTESIS_DER bloque'''
-    p[0] = ('ciclo', p[3], p[5])  # Representación de un ciclo
+    p[0] = ('ciclo', p[3], p[5])
 
 def p_condicion(p):
     '''condicion : VARIABLE MENOR_IGUAL expr 
@@ -103,8 +102,8 @@ def p_condicion(p):
                  | VARIABLE MENOR expr 
                  | VARIABLE MAYOR expr'''
     if p[1] not in variables_definidas:
-        raise ValueError(f"Variable no definida: {p[1]}")  # Verificar si la variable está definida
-    p[0] = ('condicion', p[1], p[2], p[3])  # Representación de una condición
+        raise ValueError(f"Variable no definida: {p[1]}")
+    p[0] = ('condicion', p[1], p[2], p[3])
 
 def p_condicion_error(p):
     '''condicion : VARIABLE error'''
@@ -112,7 +111,7 @@ def p_condicion_error(p):
 
 def p_bloque(p):
     '''bloque : PARENTESIS_IZQ programa PARENTESIS_DER'''
-    p[0] = p[2]  # Bloque es el programa contenido entre paréntesis
+    p[0] = p[2]
 
 def p_bloque_error(p):
     '''bloque : PARENTESIS_IZQ error'''
@@ -123,26 +122,26 @@ def p_expr(p):
            | expr MENOS term 
            | term'''
     if len(p) == 4:
-        p[0] = ('expr', p[1], p[2], p[3])  # Representación de una expresión
+        p[0] = ('expr', p[1], p[2], p[3])
     else:
-        p[0] = p[1]  # Expresión simple
+        p[0] = p[1]
 
 def p_term(p):
     '''term : term MULTIPLICACION factor 
            | term DIVISION factor 
            | factor'''
     if len(p) == 4:
-        p[0] = ('term', p[1], p[2], p[3])  # Representación de un término
+        p[0] = ('term', p[1], p[2], p[3])
     else:
-        p[0] = p[1]  # Término simple
+        p[0] = p[1]
 
 def p_factor(p):
     '''factor : NUMERO_ENTERO 
               | NUMERO_FLOTANTE 
               | VARIABLE'''
     if isinstance(p[1], str) and p[1] not in variables_definidas:
-        raise ValueError(f"Variable no definida: {p[1]}")  # Validar si la variable está definida
-    p[0] = p[1]  # Devolver el valor del factor
+        raise ValueError(f"Variable no definida: {p[1]}")
+    p[0] = p[1]
 
 # Manejo de errores sintácticos
 def p_error(p):
@@ -227,7 +226,8 @@ texto_sintactico.grid(row=4, column=1, padx=5, pady=5)
 tk.Label(ventana, text="Análisis Semántico:").grid(row=3, column=2, padx=5, pady=5)
 texto_semantico = tk.Text(ventana, height=10, width=30)
 texto_semantico.grid(row=4, column=2, padx=5, pady=5)
+ventana.configure(bg='powder blue')
 
-ventana.configure(bg='powder blue')  # Configuración del color de fondo
+
 
 ventana.mainloop()
