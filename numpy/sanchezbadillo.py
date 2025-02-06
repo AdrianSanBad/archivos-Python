@@ -1,3 +1,8 @@
+#Instituto Tecnologico de Pachuca
+#Sanchez Badillo Adrian
+#Maggi Natale Carlos Eduardo
+
+#Matriz 5x4 usando numpy y calculando promedios de filas, columnas y general con data science
 #importamos numpy
 import numpy as np
 
